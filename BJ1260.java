@@ -48,6 +48,8 @@ public class BJ1260 {
         int start = sc.nextInt();
 
         a = (ArrayList<Integer>[]) new ArrayList[n+1]; //배열이여서 이렇게 쓰는건가 형변환느낌? 근데 지금은 변환할 필요없잖아
+        //얼마만큼 받는지 모르니까 ArrayList를 쓰는건가???
+        //그리고 값을 배열로 받는건가????
 
         for (int i=1; i<=n; i++) { //값 입력
             a[i] = new ArrayList<Integer>();
