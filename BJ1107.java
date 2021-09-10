@@ -12,7 +12,6 @@
 
 수빈이가 지금 보고 있는 채널은 100번이다. 
 */
-
 import java.util.*;
 
 public class BJ1107 {
