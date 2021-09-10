@@ -16,6 +16,7 @@ public class BJ11365 {
             if(cryptogram.equals("END") ){
                 break;
             }
+            
             // }else{
             // 종료로직은 위에서 처리하고 어짜피 처리되어야하는 로직은 else로 처리하지 않고 그냥 쓴다
             StringBuffer sb = new StringBuffer(cryptogram);
