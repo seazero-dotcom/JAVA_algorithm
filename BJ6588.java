@@ -41,6 +41,7 @@ public class BJ6588 {
             if(n == 0){
                 break;
             }
+            
             for(int i =1; i<primeNumber.size();i++){
                 int p = primeNumber.get(i); // 소수 가져오기
                 if(check[n-p] == false){ // n-p가 소수면 (B가 소수인것)
