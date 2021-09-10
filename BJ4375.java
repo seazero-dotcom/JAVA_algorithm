@@ -23,6 +23,7 @@ public class BJ4375 {
         while(sc.hasNextInt()){  //받은 수가 끝날때 까지
             int n = sc.nextInt();
             int num = 0;
+            
             for(int i = 1; ;i++){  //1의 개수 카운트 역할
                 num = num * 10 + 1;
                 num = num % n; //전의 1%n값을 여기에서 num에 저장하므로써 
