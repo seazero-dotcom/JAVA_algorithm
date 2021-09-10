@@ -11,6 +11,7 @@ public class BJ11720 {
         int N = sc.nextInt();
         String number = sc.next();
         // 스트링을 한글자씩 배열에 저장한다음에 배열을 돌아가면서 누적합
+        
         int sum = 0;
         //int[] number3 = new int[N];
 
