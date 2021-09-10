@@ -9,6 +9,7 @@ public class BJ2609 {
         //유클리드 호제법 : a를 b로 나눈 나머지를 r이라고 했을 때
         //GCD(a,b) = GCD(b,r)과 같다. r이 0이면 그 때 b가 최대공약수이다.
         //GCD(24,16)=GCD(16,8)=GCD(8,0)=8
+ 
         public static int GCD(int a, int b){
             if(b == 0){
                 return a;
