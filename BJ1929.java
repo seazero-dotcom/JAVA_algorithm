@@ -1,6 +1,7 @@
 /* 소수 구하기 
 M이상 N이하의 소수를 모두 출력하는 프로그램을 작성하시오.
 */
+
 import java.util.*;
 
 public class BJ1929 {
