@@ -15,12 +15,22 @@ public class BJ11365 {
             cryptogram = sc.nextLine();
             if(cryptogram.equals("END") ){
                 break;
-            }else{
-                StringBuffer sb = new StringBuffer(cryptogram);
-                System.out.println(sb.reverse().toString());
-                 
             }
+            // }else{
+            // 종료로직은 위에서 처리하고 어짜피 처리되어야하는 로직은 else로 처리하지 않고 그냥 쓴다
+            StringBuffer sb = new StringBuffer(cryptogram);
+            System.out.println(sb.reverse().toString());
+                 
+            // }
         }
+
+        /*
+        String reversedString = null;
+
+        reversedString = sc.nextLine();
+        while (!reversedString.equals("END")) {
+            System.out.println(new StringBuffer(reversedString).reverse().toString());
+            reversedString = sc.nextLine(); */
 
         
     }

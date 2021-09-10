@@ -12,11 +12,13 @@ public class BJ11720 {
         String number = sc.next();
         // 스트링을 한글자씩 배열에 저장한다음에 배열을 돌아가면서 누적합
         int sum = 0;
-        int[] number3 = new int[N];
+        //int[] number3 = new int[N];
 
         for (int i = 0; i < N; i++) {
-            number3[i] = Character.getNumericValue(number.charAt(i));
-            sum = sum + number3[i];
+            //String은 Integer.parseInt()로 int변환 가능
+            //char는 Character.getNumericValue()로 int로 변환함
+            //number3[i] = Character.getNumericValue(number.charAt(i));
+            sum += Character.getNumericValue(number.charAt(i)); //한줄로 표현하기
         }
 
         System.out.println(sum);
