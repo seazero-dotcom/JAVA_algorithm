@@ -6,7 +6,6 @@ x보다 작거나 같은 모든 자연수 y의 f(y)값을 더한 값은 g(x)로 
 
 자연수 N이 주어졌을 때, g(N)을 구해보자.
  */
-
 import java.io.*;
 import java.util.*;
 
