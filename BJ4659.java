@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 3. 같은 글자가 연속적으로 두번 오면 안되나, ee 와 oo는 허용한다.
 이 규칙은 완벽하지 않다;우리에게 친숙하거나 발음이 쉬운 단어 중에서도 품질이 낮게 평가되는 경우가 많이 있다.
 */
+
 import java.io.*;
 
 public class BJ4659 {
