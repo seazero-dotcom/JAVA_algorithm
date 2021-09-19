@@ -14,53 +14,47 @@
 import java.util.*;
 
 public class BJ1697 {
-    static int N;
-    static int K;
-    static int[] check = new int[100001]; // 수빈과 동생의 범위 100,000
+
+    private static int N; // 수빈이 위치
+    private static int K; // 동생 위치
+    private static int[] map = new int[100001];
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        N = sc.nextInt(); // 수빈이 현재 위치
-        K = sc.nextInt(); // 동생 현재 위치
 
-        int answer = bfs(N);
-        System.out.println(answer);
+        N = sc.nextInt();
+        K = sc.nextInt();
 
+        bfs();
+        System.out.println(map[K]);
     }
 
-    static int bfs(int n) {
+    static void bfs() {
         Queue<Integer> que = new LinkedList<>();
 
-        que.add(n);
-        int index = n;
-        check[index] = 1; // 수빈이 index n에서 0초를 1로세고 시작
+        que.offer(N);
 
-        while (!que.isEmpty()) { // 큐가 빌 때 까지 반복
-            int now = que.remove();
+        while (!que.isEmpty()) {
+            N = que.poll();
 
-            if (n == K) {// 동생의 위치값이 0이 아니면 이미 최솟값을 찾은 것이므로 벗어난다.
-                return check[n] - 1; // 0초를 1로 계산했기 때문에 1뻬줌
+            if (N == K) {
+                break;
             }
 
-            if ((now - 1 >= 0) && check[now - 1] == 0) {
-                check[now - 1] = check[now] + 1; // 이동할 수 있는 경우 now-1
-                que.add(now - 1);
-
+            if (N - 1 >= 0 && map[N - 1] == 0) {
+                que.offer(N - 1);
+                map[N - 1] = map[N] + 1;
             }
 
-            if ((now + 1 <= check.length - 1) && check[now + 1] == 0) {
-                check[now + 1] = check[now] + 1; // 이동할 수 있는 경우 now+1
-                que.add(now + 1);
-
+            if (N + 1 <= 100000 && map[N + 1] == 0) {
+                que.offer(N + 1);
+                map[N + 1] = map[N] + 1;
             }
 
-            if ((now * 2 <= check.length - 1) && check[now * 2] == 0) {
-                check[now * 2] = check[now] + 1; // 이동할 수 있는 경우 순간이동 x*2
-                que.add(now * 2);
-
+            if (N * 2 <= 100000 && map[N * 2] == 0) {
+                que.offer(N * 2);
+                map[N * 2] = map[N] + 1;
             }
-
         }
-        return -1;
     }
 }
