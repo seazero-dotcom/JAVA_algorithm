@@ -28,24 +28,24 @@ public class BJ10866 {
 
         ArrayDeque<Integer> que = new ArrayDeque<Integer>();
 
-        for (int k=0; k<N; k++) {
+        for (int k = 0; k < N; k++) {
             String[] str = br.readLine().split(" ");
             String input = str[0];
 
             if (input.equals("push_front")) {
                 int num = Integer.parseInt(str[1]);
-                que.offerFirst(num);  //앞
+                que.offerFirst(num); // 앞
 
             } else if (input.equals("push_back")) {
                 int num = Integer.parseInt(str[1]);
-                que.offerLast(num);  //뒤
+                que.offerLast(num); // 뒤
 
-            }  else if (input.equals("front")) {
+            } else if (input.equals("front")) {
 
                 if (que.isEmpty()) {
                     bw.write("-1");
                 } else {
-                    bw.write(String.valueOf(que.peekFirst())); //앞
+                    bw.write(String.valueOf(que.peekFirst())); // 앞
                 }
                 bw.write("\n");
 
@@ -60,14 +60,14 @@ public class BJ10866 {
                 } else {
                     bw.write("0\n");
                 }
-                //bw.write("\n");
+                // bw.write("\n");
 
             } else if (input.equals("pop_front")) {
 
                 if (que.isEmpty()) {
                     bw.write("-1");
                 } else {
-                    bw.write(String.valueOf(que.pollFirst())); //앞
+                    bw.write(String.valueOf(que.pollFirst())); // 앞
                 }
                 bw.write("\n");
 
@@ -76,7 +76,7 @@ public class BJ10866 {
                 if (que.isEmpty()) {
                     bw.write("-1");
                 } else {
-                    bw.write(String.valueOf(que.pollLast())); //뒤
+                    bw.write(String.valueOf(que.pollLast())); // 뒤
                 }
                 bw.write("\n");
 
@@ -85,12 +85,15 @@ public class BJ10866 {
                 if (que.isEmpty()) {
                     bw.write("-1");
                 } else {
-                    bw.write(String.valueOf(que.peekLast())); //뒤
+                    bw.write(String.valueOf(que.peekLast())); // 뒤
                 }
                 bw.write("\n");
 
             }
         }
         bw.flush();
+
+        bw.close();
+        br.close();
     }
 }
