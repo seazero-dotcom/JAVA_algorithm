@@ -25,17 +25,23 @@ public class BJ16935 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken()); // 행
-        M = Integer.parseInt(st.nextToken()); // 열
-        R = Integer.parseInt(st.nextToken()); // 수행해야하는 연산의 수
+        // StringTokenizer st = new StringTokenizer(br.readLine());
+        String[] st= br.readLine().split(" ");
+        // N = Integer.parseInt(st.nextToken()); // 행
+        // M = Integer.parseInt(st.nextToken()); // 열
+        // R = Integer.parseInt(st.nextToken()); // 수행해야하는 연산의 수
+        N = Integer.parseInt(st[0]);
+        M = Integer.parseInt(st[1]);
+        R = Integer.parseInt(st[2]);
         A = new int[N][M];
 
         // 배열 받고
         for (int i = 0; i < N; i++) {
-            StringTokenizer str = new StringTokenizer(br.readLine());
+            // StringTokenizer str = new StringTokenizer(br.readLine());
+            String[] str = br.readLine().split(" ");
             for (int j = 0; j < M; j++) {
-                A[i][j] = Integer.parseInt(str.nextToken());
+                // A[i][j] = Integer.parseInt(str.nextToken());
+                A[i][j] = Integer.parseInt(str[j]);
             }
         }
 
