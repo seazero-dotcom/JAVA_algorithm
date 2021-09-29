@@ -21,33 +21,118 @@ public class BJ16935 {
     static int[][] B;
     static int[][] temp;
 
+    // 번호별로 움직이는 것 각각 구현하고
+    public static void numOne() { // 상하
+        N = A.length;
+        M = A[0].length;
+        B = new int[N][M];
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                B[i][j] = A[N - i - 1][j]; // 상하로 움직이면 행이 달라진다
+            }
+        }
+        A = B;
+    }
+
+    public static void numTwo() { // 좌우
+        N = A.length;
+        M = A[0].length;
+        B = new int[N][M];
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                B[i][j] = A[i][M - j - 1]; // 좌우로 움직이면 열이 달라진다
+            }
+        }
+        A = B;
+
+    }
+
+    public static void numThree() { // 오른쪽 90
+        N = A.length;
+        M = A[0].length;
+        B = new int[M][N];
+
+        for (int i = 0; i < A[0].length; i++) {
+            for (int j = 0; j < A.length; j++) {
+                B[i][j] = A[N - j - 1][i]; // 오 90
+            }
+        }
+        A = B;
+
+    }
+
+    public static void numFour() { // 왼쪽 90
+        N = A.length;
+        M = A[0].length;
+        B = new int[M][N]; // 8 6
+
+        for (int i = 0; i < M; i++) {// 8
+            for (int j = 0; j < N; j++) {// 6
+                B[i][j] = A[j][M - i - 1]; // 왼 90
+            }
+        }
+        A = B;
+
+    }
+
+    public static void numFive() { // 1->2->3->4->1
+        N = A.length;
+        M = A[0].length;
+        B = new int[N][M];
+
+        for (int i = 0; i < N / 2; i++) {
+            for (int j = 0; j < M / 2; j++) {
+                B[i][j + M / 2] = A[i][j]; // 2 <- 1
+                B[i + N / 2][j + M / 2] = A[i][j + M / 2]; // 3 <- 2
+                B[i + N / 2][j] = A[i + N / 2][j + M / 2]; // 4 <- 3
+                B[i][j] = A[i + N / 2][j]; // 1 <- 4
+            }
+        }
+        A = B;
+
+    }
+
+    public static void numSix() { // 1->4->3->2->1
+        N = A.length;
+        M = A[0].length;
+        B = new int[N][M];
+
+        for (int i = 0; i < N / 2; i++) {
+            for (int j = 0; j < M / 2; j++) {
+                B[i + N / 2][j] = A[i][j]; // 4 <- 1
+                B[i + N / 2][j + M / 2] = A[i + N / 2][j]; // 3 <- 4
+                B[i][j + M / 2] = A[i + N / 2][j + M / 2]; // 2 <- 3
+                B[i][j] = A[i][j + M / 2]; // 1 <- 2
+            }
+        }
+        A = B;
+
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        // StringTokenizer st = new StringTokenizer(br.readLine());
-        String[] st= br.readLine().split(" ");
-        // N = Integer.parseInt(st.nextToken()); // 행
-        // M = Integer.parseInt(st.nextToken()); // 열
-        // R = Integer.parseInt(st.nextToken()); // 수행해야하는 연산의 수
-        N = Integer.parseInt(st[0]);
-        M = Integer.parseInt(st[1]);
-        R = Integer.parseInt(st[2]);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken()); // 행
+        M = Integer.parseInt(st.nextToken()); // 열
+        R = Integer.parseInt(st.nextToken()); // 수행해야하는 연산의 수
         A = new int[N][M];
 
         // 배열 받고
         for (int i = 0; i < N; i++) {
-            // StringTokenizer str = new StringTokenizer(br.readLine());
-            String[] str = br.readLine().split(" ");
+            StringTokenizer str = new StringTokenizer(br.readLine());
             for (int j = 0; j < M; j++) {
-                // A[i][j] = Integer.parseInt(str.nextToken());
-                A[i][j] = Integer.parseInt(str[j]);
+                A[i][j] = Integer.parseInt(str.nextToken());
             }
         }
 
+        String[] numInput = br.readLine().split(" ");
         // 수행해야하는 연산들 switch case로 이동하기
         for (int i = 0; i < R; i++) {
-            int num = Integer.parseInt(br.readLine());
+            int num = Integer.parseInt(numInput[i]);
 
             switch (num) {
                 case 1:
@@ -76,93 +161,18 @@ public class BJ16935 {
             }
         }
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                bw.write(temp[i][j] + " ");
+        for (int i = 0; i < A.length; i++) {
+            for (int j = 0; j < A[i].length; j++) {
+                bw.write(A[i][j] + " ");
+
             }
             bw.newLine();
         }
+
         bw.flush();
+
         br.close();
         bw.close();
     }
 
-    // 번호별로 움직이는 것 각각 구현하고
-    public static void numOne() { // 상하
-        B = new int[N][M];
-        temp = new int[N][M];
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                B[i][j] = A[N - i - 1][j]; // 상하로 움직이면 행이 달라진다
-            }
-        }
-        temp = B;
-    }
-
-    public static void numTwo() { // 좌우
-        B = new int[N][M];
-        temp = new int[N][M];
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                B[i][j] = A[i][M - j - 1]; // 좌우로 움직이면 열이 달라진다
-            }
-        }
-        temp = B;
-    }
-
-    public static void numThree() { // 오른쪽 90
-        B = new int[N][M];
-        temp = new int[N][M];
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                B[i][j] = A[N - j - 1][i]; // 오 90
-            }
-        }
-        temp = B;
-    }
-
-    public static void numFour() { // 왼쪽 90
-        B = new int[N][M];
-        temp = new int[N][M];
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                B[i][j] = A[j][M - i - 1]; // 왼 90
-            }
-        }
-        temp = B;
-    }
-
-    public static void numFive() { // 1->2->3->4->1
-        B = new int[N][M];
-        temp = new int[N][M];
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                B[i][j + M / 2] = A[i][j]; // 2 <- 1
-                B[i + N / 2][j + M / 2] = A[i][j + M / 2]; // 3 <- 2
-                B[i + N / 2][j] = A[i + N / 2][j + M / 2]; // 4 <- 3
-                B[i][j] = A[i + N / 2][j]; // 1 <- 4
-            }
-        }
-        temp = B;
-    }
-
-    public static void numSix() { // 1->4->3->2->1
-        B = new int[N][M];
-        temp = new int[N][M];
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                B[i + N / 2][j] = A[i][j]; // 4 <- 1
-                B[i + N / 2][j + M / 2] = A[i + N / 2][j]; // 3 <- 4
-                B[i][j + M / 2] = A[i + N / 2][j + M / 2]; // 2 <- 3
-                B[i][j] = A[i][j + M / 2]; // 1 <- 2
-            }
-        }
-        temp = B;
-    }
 }
