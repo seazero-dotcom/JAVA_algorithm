@@ -19,6 +19,7 @@ A[4][1] → A[4][2] → A[4][3] → A[4][4] → A[4][5]
 */
 
 import java.io.*;
+// import java.util.*;
 
 public class BJ16927 {
     static int N;
@@ -26,6 +27,7 @@ public class BJ16927 {
     static int R;
     static int[][] A;
     static int[][] B;
+    static int[][] C;
     static int[][] temp;
 
     public static void main(String[] args) throws IOException {
@@ -48,35 +50,41 @@ public class BJ16927 {
         }
 
         int group = Math.min(N, M) / 2;
-        temp = A;
-        int len = (N * 2 + M * 2) - 4;
-        for (int l = 0; l < R; l++) { // 회전 수
-            B = new int[N][M];
+        C = new int[N][M];
 
-            for (int k = 0; k < group; k++) { // 0~K번째 그룹 돌기
+        for (int l = 0; l < group; l++) { // 0~K번째 그룹 돌기
 
-                for (int j = k + 1; j < M - k; j++) { // 첫 행
-                    B[k][j - 1] = temp[k][j];
+            temp = A;
+            int len = ((N - l * 2) * 2 + (M - l * 2) * 2) - 4;
+
+            for (int k = 0; k < R % len; k++) { // 회전 수
+                B = new int[N][M];
+
+                for (int j = l + 1; j < M - l; j++) { // 첫 행
+                    B[l][j - 1] = temp[l][j];
+                    C[l][j - 1] = B[l][j - 1];
                 }
-                for (int i = k; i < N - k - 1; i++) { // 첫 열
-                    B[i + 1][k] = temp[i][k];
+                for (int i = l; i < N - l - 1; i++) { // 첫 열
+                    B[i + 1][l] = temp[i][l];
+                    C[i + 1][l] = B[i + 1][l];
                 }
-                for (int j = k; j < M - k - 1; j++) { // 맨 아래 행
-                    B[N - k - 1][j + 1] = temp[N - k - 1][j];
+                for (int j = l; j < M - l - 1; j++) { // 맨 아래 행
+                    B[N - l - 1][j + 1] = temp[N - l - 1][j];
+                    C[N - l - 1][j + 1] = B[N - l - 1][j + 1];
                 }
-                for (int i = N - k - 1; i > k; i--) { // 맨 오른쪽 열
-                    B[i - 1][M - k - 1] = temp[i][M - k - 1];
+                for (int i = N - l - 1; i > l; i--) { // 맨 오른쪽 열
+                    B[i - 1][M - l - 1] = temp[i][M - l - 1];
+                    C[i - 1][M - l - 1] = B[i - 1][M - l - 1];
                 }
 
+                temp = new int[N][M];
+                temp = B;
             }
-            temp = new int[N][M];
-            temp = B;
         }
 
-        for (int i = 0; i < temp.length; i++) {
-            for (int j = 0; j < temp[i].length; j++) {
-                bw.write(temp[i][j] + " ");
-
+        for (int i = 0; i < C.length; i++) {
+            for (int j = 0; j < C[i].length; j++) {
+                bw.write(C[i][j] + " ");
             }
             bw.newLine();
         }
