@@ -1,4 +1,3 @@
-
 /* ABCDE
 BOJ 알고리즘 캠프에는 총 N명이 참가하고 있다. 사람들은 0번부터 N-1번으로 번호가 매겨져 있고, 일부 사람들은 친구이다.
 
@@ -10,71 +9,83 @@ C는 D와 친구다.
 D는 E와 친구다.
 위와 같은 친구 관계가 존재하는지 안하는지 구하는 프로그램을 작성하시오.
  */
-// 어려워서 못해먹겠음
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class BJ13023 {
-
-    static int N, M, res;
-    static ArrayList<Integer>[] friends;
-    static boolean visited[];
+    static int N;
+    static int M;
+    static int a;
+    static int b;
+    static ArrayList<ArrayList<Integer>> friendGroup;
+    static boolean[] visited;
+    static int relation;
 
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken()); // 사람의 수
+        M = Integer.parseInt(st.nextToken()); // 친구 관계의 수
 
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        friends = new ArrayList[N];
+        friendGroup = new ArrayList<ArrayList<Integer>>();
+        visited = new boolean[N];
 
         for (int i = 0; i < N; i++) {
-            friends[i] = new ArrayList<>();
+            friendGroup.add(new ArrayList<>());
         }
 
-        // 관계 저장
-        for (int i = 0; i < M; i++) {
+        for (int i = 0; i < M; i++) { // 친구관계 입력
+            // friends = new ArrayList<Integer>(); 위에서 한번에 만들었기 때문에 이렇게 생성 안해도됨
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
+            a = Integer.parseInt(st.nextToken());
+            b = Integer.parseInt(st.nextToken());
+            friendGroup.get(a).add(b);
+            friendGroup.get(b).add(a);
+            // friendGroup.add(friends); 위에서 한번에 만들었기 때문에 이렇게 안넣어줘도됨
 
-            friends[a].add(b);
-            friends[b].add(a);
         }
-        // 0번 친구부터 확인
+
         for (int i = 0; i < N; i++) {
-
-            visited = new boolean[N];
             visited[i] = true;
-            process(i, 0);
-            // 위와 같은 관계 발견 시
-            if (res == 4)
+
+            DFS(i, 0);
+            if (relation == 4) {
                 break;
+            }
         }
 
-        if (res == 4)
-            System.out.println(1);
-        else
-            System.out.println(0);
+        if (relation == 4) {
+            bw.write("1");
+        } else {
+            bw.write("0");
+        }
+
+        bw.flush();
+        bw.close();
+        br.close();
     }
 
-    private static void process(int my, int cnt) {
-
-        res = Math.max(res, cnt);
-        // 위와 같은 관계 발견 시
-        if (res == 4)
+    public static void DFS(int x, int cnt) {
+        if (cnt == 4) {
+            relation = 4;
             return;
-
-        for (int frd : friends[my]) {
-            if (visited[frd])
-                continue;
-            visited[frd] = true;
-            process(frd, cnt + 1);
         }
-        // 다른 경로에서도 확인할 수 있도록
-        visited[my] = false;
-    }
 
+        for (int i : friendGroup.get(x)) { // 아래 이차원 배열에서 friends[x][i] == 1 같은 존재
+            if (visited[i])
+                continue;
+            visited[i] = true;
+            DFS(i, cnt + 1);
+            // if (friends[x][i] == 1 && visited[i] == false) {
+            // visited[i] = true;
+            // DFS(i, relation + 1);
+            // }
+        }
+        visited[x] = false;
+
+    }
 }
