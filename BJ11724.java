@@ -1,103 +1,77 @@
-import java.util.Scanner;
 
 /* 연결 요소의 개수
 방향 없는 그래프가 주어졌을 때, 
 연결 요소 (Connected Component)의 개수를 구하는 프로그램을 작성하시오.
 */
+import java.io.*;
 import java.util.*;
 
 public class BJ11724 {
-    public static void dfs(ArrayList<Integer>[] a, boolean[] check, int x) {
-        if (check[x]) {
-            return;
+    static int N;
+    static int M;
+    static int u;
+    static int v;
+    static ArrayList<ArrayList<Integer>> connected;
+    static boolean[] visited;
+    static int component;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken()); // 정점의 개수
+        M = Integer.parseInt(st.nextToken()); // 간선의 개수
+
+        connected = new ArrayList<ArrayList<Integer>>();
+        visited = new boolean[N + 1];
+
+        for (int i = 0; i < N + 1; i++) {
+            connected.add(new ArrayList<Integer>());
         }
-        check[x] = true;
-        for (int y : a[x]) {
-            if (check[y] == false) {
-                dfs(a, check, y);
+
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            u = Integer.parseInt(st.nextToken());
+            v = Integer.parseInt(st.nextToken());
+            connected.get(u).add(v);
+            connected.get(v).add(u);
+        }
+
+        for (int i = 1; i < N + 1; i++) {
+
+            if (visited[i] == false) { // 방문한적 없는 노드 방문하면서 카운트
+                DFS(i);
+                component++;
             }
         }
+
+        bw.write(String.valueOf(component));
+
+        bw.flush();
+        bw.close();
+        br.close();
+
+        // System.out.println("************ 이중 ArrayList 찍어보기 **************");
+        // for (int i = 1; i < connected.size(); i++) {
+        // System.out.print("[" + i + "] ");
+        // for (int j = 0; j < connected.get(i).size(); j++) {
+        // System.out.print(connected.get(i).get(j) + " ");
+        // }
+        // System.out.println();
+        // }
+
     }
-    public static void main(String args[]) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int m = sc.nextInt();
 
-        ArrayList<Integer>[] a = (ArrayList<Integer>[]) new ArrayList[n+1];
+    public static void DFS(int x) {
 
-        for (int i=1; i<=n; i++) {
-            a[i] = new ArrayList<Integer>();
-        }
+        for (int i : connected.get(x)) {
+            if (visited[i])
+                continue;
 
-        for (int i=0; i<m; i++) {
-            int u = sc.nextInt();
-            int v = sc.nextInt();
-            a[u].add(v);
-            a[v].add(u);
+            visited[i] = true;
+            DFS(i);
         }
-        
-        boolean[] check = new boolean[n+1];
-        int ans = 0;
-        for (int i=1; i<=n; i++) {
-            if (check[i] == false) {
-                dfs(a, check, i);
-                ans += 1;
-            }
-        }
-        System.out.println(ans);
-                
 
     }
 }
-
-//bfs에서 다 처리할 수 있도록 바꾸는중
-// import java.util.*;
-
-// public class BJ11724 {
-//     static ArrayList<Integer>[] input;
-//     static boolean[] check; //위아래 다 쓰니까 여기에 선언
-
-//     public static void bfs(ArrayList<Integer>[] input, boolean[] check){
-//         Queue<Integer> que = new LinkedList<Integer>();
-//         int ans =0;
-        
-//         // que.add(start);
-//         check[0] = true;
-        
-//         while (!que.isEmpty()) {
-//             int x = que.remove();
-//             System.out.print(x + " ");
-//             for (int y : input[x]) {
-//                 if (check[y] == false) {
-//                     check[y] = true;
-//                     que.add(y);
-//                 }
-//             }
-//         }
-//     }
-//     public static void main(String[] args) {
-//         Scanner sc = new Scanner(System.in);
-//         int N = sc.nextInt(); //정점의 개수
-//         int M = sc.nextInt(); //간선의 개수
-
-//         input = (ArrayList<Integer>[]) new ArrayList[N+1];
-
-//         for (int i=1; i<=N; i++) { 
-//             input[i] = new ArrayList<Integer>();
-//         }
-
-
-//         for (int i=0; i<M; i++) {
-//             int u = sc.nextInt();
-//             int v = sc.nextInt();
-//             input[u].add(v);
-//             input[v].add(u);
-//         }
-
-//         check = new boolean[N+1];  //불리안 생성
-//         //int start = input[0].get(0);
-//         bfs(input, check);
-
-        
-//     }    
-// }
