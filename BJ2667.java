@@ -32,23 +32,24 @@ public class BJ2667 {
             Apt.add(br.readLine());
         }
 
+        ArrayList<Integer> answerAptList = new ArrayList<>();
+
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (Apt.get(i).charAt(j) == '1' && !visited[i][j]) {
-                    apartNum++;
+                if (!visited[i][j] && Apt.get(i).charAt(j) == '1') {
+                    apartNum = 0;
                     DFS(i, j);
+                    answerAptList.add(apartNum);
                 }
             }
         }
 
-        Arrays.sort(danji);
-        bw.write(String.valueOf(apartNum) + "\n");
+        bw.write(String.valueOf(answerAptList.size()) + "\n");
 
-        for (int i = 0; i < danji.length; i++) {
-            if (danji[i] == 0) {
-            } else {
-                bw.write(danji[i] + "\n");
-            }
+        Collections.sort(answerAptList);
+        for (int i : answerAptList) {
+            bw.write(String.valueOf(i));
+            bw.newLine();
         }
 
         bw.flush();
@@ -57,8 +58,8 @@ public class BJ2667 {
     }
 
     public static void DFS(int x, int y) {
-        visited[x][y] = true; // 방문하면 T
-        danji[apartNum]++; // 단지속 아파트 카운트
+        visited[x][y] = true; // 방문하면 True
+        apartNum += 1;
 
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i];
@@ -70,5 +71,6 @@ public class BJ2667 {
                 }
             }
         }
+
     }
 }
