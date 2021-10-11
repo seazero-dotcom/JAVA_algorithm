@@ -15,144 +15,254 @@
 단, 상자의 일부 칸에는 토마토가 들어있지 않을 수도 있다.
 */
 
+import java.io.*;
 import java.util.*;
 
-class Tomato {
+class tomatoCoordinate {
     int x;
     int y;
-    Tomato(int x, int y) {
+
+    public tomatoCoordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
 }
 
 public class BJ7576 {
-    public static final int[] dx = {0, 0, 1, -1};
-    public static final int[] dy = {1, -1, 0, 0};
-    public static void main(String args[]) {
-        Scanner sc = new Scanner(System.in);
-        int m = sc.nextInt();
-        int n = sc.nextInt();
-        int[][] a = new int[n][m];
-        int[][] dist = new int[n][m];
+    static int N;
+    static int M;
+    static ArrayList<ArrayList<Integer>> tomato;
+    static boolean[][] visited;
+    static int[] dx = { 0, 0, 1, -1 };
+    static int[] dy = { 1, -1, 0, 0 };
+    static int[][] distance;
 
-        Queue<Tomato> q = new LinkedList<Tomato>();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        for (int i=0; i<n; i++) {
-            for (int j=0; j<m; j++) {
-                a[i][j] = sc.nextInt();
-                dist[i][j] = -1;
-                if (a[i][j] == 1) {
-                    q.add(new Tomato(i, j));
-                    dist[i][j] = 0;
-                }
+        tomato = new ArrayList<ArrayList<Integer>>();
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        visited = new boolean[M][N];
+        distance = new int[M][N];
+
+        for (int i = 0; i < M; i++) {
+            tomato.add(new ArrayList<Integer>());
+        }
+
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < N; j++) {
+                tomato.get(i).add(j, Integer.parseInt(st.nextToken()));
             }
         }
-        while (!q.isEmpty()) {
-            Tomato p = q.remove();
-            int x = p.x;
-            int y = p.y;
-            for (int k=0; k<4; k++) {
-                int nx = x+dx[k];
-                int ny = y+dy[k];
-                if (0 <= nx && nx < n && 0 <= ny && ny < m) {
-                    if (a[nx][ny] == 0 && dist[nx][ny] == -1) {
-                        q.add(new Tomato(nx, ny));
-                        dist[nx][ny] = dist[x][y] + 1;
-                    }
-                }
+
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                System.out.print(tomato.get(i).get(j) + " ");
             }
+            System.out.println();
         }
+
+        BFS();
 
         int ans = 0;
-        for (int i=0; i<n; i++) {
-            for (int j=0; j<m; j++) {
-                if (ans < dist[i][j]) {
-                    ans = dist[i][j];
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                if (ans < distance[i][j]) {
+                    ans = distance[i][j];
                 }
             }
         }
-        
-        for (int i=0; i<n; i++) {
-            for (int j=0; j<m; j++) {
-                if (a[i][j] == 0 && dist[i][j] == -1) {
-                    ans = -1;
+
+        bw.write(String.valueOf(ans));
+
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
+    public static void BFS() {
+        Queue<tomatoCoordinate> q = new LinkedList<tomatoCoordinate>();
+        q.add(new tomatoCoordinate(0, 0));
+
+        while (!q.isEmpty()) {
+            tomatoCoordinate tomaCoo = q.remove();
+            int x = tomaCoo.x;
+            int y = tomaCoo.y;
+            if (x >= 0 && x < M && y >= 0 && y < N) {
+                for (int i = 0; i < 4; i++) {
+                    int nx = x + dx[i];
+                    int ny = y + dy[i];
+
+                    if (nx >= 0 && nx < M && ny >= 0 && ny < N && !tomato.get(nx).get(ny).equals(-1)) {
+                        // if (nx >= 0 && nx < M && ny >= 0 && ny < N) {
+
+                        if (tomato.get(nx).get(ny).equals(1) && !visited[nx][ny]) {
+                            visited[nx][ny] = true;
+                            distance[nx][ny] = distance[x][y] + 1;
+                            for (int j = 0; j < 4; j++) {
+                                int nnx = nx + dx[j];
+                                int nny = ny + dy[j];
+                                if (nnx >= 0 && nnx < M && nny >= 0 && nny < N && !tomato.get(nx).get(ny).equals(-1)) {
+
+                                    // if (tomato.get(nx).get(ny).equals(-1))
+                                    // continue;
+
+                                    tomato.get(nnx).add(nny, 1);
+                                }
+                            }
+                        }
+
+                    }
+                    q.add(new tomatoCoordinate(nx, ny));
+
                 }
             }
         }
-        System.out.println(ans);
     }
 }
 
+// import java.util.*;
 
+// class Tomato {
+// int x;
+// int y;
+// Tomato(int x, int y) {
+// this.x = x;
+// this.y = y;
+// }
+// }
 
+// public class BJ7576 {
+// public static final int[] dx = {0, 0, 1, -1};
+// public static final int[] dy = {1, -1, 0, 0};
+// public static void main(String args[]) {
+// Scanner sc = new Scanner(System.in);
+// int m = sc.nextInt();
+// int n = sc.nextInt();
+// int[][] a = new int[n][m];
+// int[][] dist = new int[n][m];
+
+// Queue<Tomato> q = new LinkedList<Tomato>();
+
+// for (int i=0; i<n; i++) {
+// for (int j=0; j<m; j++) {
+// a[i][j] = sc.nextInt();
+// dist[i][j] = -1;
+// if (a[i][j] == 1) {
+// q.add(new Tomato(i, j));
+// dist[i][j] = 0;
+// }
+// }
+// }
+// while (!q.isEmpty()) {
+// Tomato p = q.remove();
+// int x = p.x;
+// int y = p.y;
+// for (int k=0; k<4; k++) {
+// int nx = x+dx[k];
+// int ny = y+dy[k];
+// if (0 <= nx && nx < n && 0 <= ny && ny < m) {
+// if (a[nx][ny] == 0 && dist[nx][ny] == -1) {
+// q.add(new Tomato(nx, ny));
+// dist[nx][ny] = dist[x][y] + 1;
+// }
+// }
+// }
+// }
+
+// int ans = 0;
+// for (int i=0; i<n; i++) {
+// for (int j=0; j<m; j++) {
+// if (ans < dist[i][j]) {
+// ans = dist[i][j];
+// }
+// }
+// }
+
+// for (int i=0; i<n; i++) {
+// for (int j=0; j<m; j++) {
+// if (a[i][j] == 0 && dist[i][j] == -1) {
+// ans = -1;
+// }
+// }
+// }
+// System.out.println(ans);
+// }
+// }
 
 // import java.util.*;
 
 // class Tomato { // 여기서 왜 클래스를 따로 선언해주는 걸까 Tomato를 여러개 쓴다 이말이지
-//     int x, y, day;
+// int x, y, day;
 
-//     Tomato(int x, int y, int day) {
-//         this.x = x;
-//         this.y = y;
-//         this.day = day;
-//     }
+// Tomato(int x, int y, int day) {
+// this.x = x;
+// this.y = y;
+// this.day = day;
+// }
 // }
 
 // public class BJ7576 {
-//     public int solution(int n, int m, int[][] garden) {
-//         int answer = 0;
+// public int solution(int n, int m, int[][] garden) {
+// int answer = 0;
 
-//         int[] dx = { -1, 1, 0, 0 }; // 행 좌 우 하 상
-//         int[] dy = { 0, 0, -1, 1 }; // 열
+// int[] dx = { -1, 1, 0, 0 }; // 행 좌 우 하 상
+// int[] dy = { 0, 0, -1, 1 }; // 열
 
-//         Queue<Tomato> q = new LinkedList<Tomato>(); //Tomato형 큐 선언
+// Queue<Tomato> q = new LinkedList<Tomato>(); //Tomato형 큐 선언
 
-//         for (int i = 0; i < n; i++) {
-//             for (int j = 0; j < m; j++) {
-//                 if (garden[i][j] == 1) { //정원에 꽃이 있다면 
-//                     q.offer(new Tomato(i, j, 0)); // Tomato를 큐에 넣는다 day0이네
-//                 }
-//             }
-//         }
+// for (int i = 0; i < n; i++) {
+// for (int j = 0; j < m; j++) {
+// if (garden[i][j] == 1) { //정원에 꽃이 있다면
+// q.offer(new Tomato(i, j, 0)); // Tomato를 큐에 넣는다 day0이네
+// }
+// }
+// }
 
-//         while (!q.isEmpty()) {
-//             Tomato tomato = q.peek(); //큐의 가장 앞에 있는 값을 Tomato형 x,y,day를 저장한다
-//             q.poll(); //맨처음으로 들어간 데이터를 제거한다
+// while (!q.isEmpty()) {
+// Tomato tomato = q.peek(); //큐의 가장 앞에 있는 값을 Tomato형 x,y,day를 저장한다
+// q.poll(); //맨처음으로 들어간 데이터를 제거한다
 
-//             for (int i = 0; i < 4; i++) { //씨앗이 사방으로 퍼지니까 4
-//                 int nextX = tomato.x + dx[i]; // peek한 tomato x + -1
-//                 int nextY = tomato.y + dy[i]; // peek한 tomato y + 0
-//                 int nextDay = tomato.day + 1; // peek한 tomato day + 1 씨앗 뿌려졌으니까 1일증가
+// for (int i = 0; i < 4; i++) { //씨앗이 사방으로 퍼지니까 4
+// int nextX = tomato.x + dx[i]; // peek한 tomato x + -1
+// int nextY = tomato.y + dy[i]; // peek한 tomato y + 0
+// int nextDay = tomato.day + 1; // peek한 tomato day + 1 씨앗 뿌려졌으니까 1일증가
 
-//                 if ((0 <= nextX && nextX < n && 0 <= nextY && nextY < m) && garden[nextX][nextY] == 0) {
-//                     //이동한 좌표가 범위 안에 있고 정원에 꽃이 없다면
-//                     garden[nextX][nextY] = 1; //꽃을 심어주고
-//                     answer = nextDay; //날짜 증가한거를 답에 저장
-//                     q.offer(new Tomato(nextX, nextY, nextDay)); //좌표바뀐거랑 날짜를 큐에 저장
-//                 }
-//             }
-//         }
+// if ((0 <= nextX && nextX < n && 0 <= nextY && nextY < m) &&
+// garden[nextX][nextY] == 0) {
+// //이동한 좌표가 범위 안에 있고 정원에 꽃이 없다면
+// garden[nextX][nextY] = 1; //꽃을 심어주고
+// answer = nextDay; //날짜 증가한거를 답에 저장
+// q.offer(new Tomato(nextX, nextY, nextDay)); //좌표바뀐거랑 날짜를 큐에 저장
+// }
+// }
+// }
 
-//         return answer;
-//     }
+// return answer;
+// }
 
-//     public static void main(String[] args) {
-//         BJ7576 sol = new BJ7576();
+// public static void main(String[] args) {
+// BJ7576 sol = new BJ7576();
 
-//         Scanner sc = new Scanner(System.in);
-//         int N = sc.nextInt();
-//         int M = sc.nextInt();
-//         int[][] garden = new int[N][M];
+// Scanner sc = new Scanner(System.in);
+// int N = sc.nextInt();
+// int M = sc.nextInt();
+// int[][] garden = new int[N][M];
 
-//         for(int i=0;i<N;i++){
-//             for(int j=0;j<M;j++){
-//                 garden[i][j] = sc.nextInt();
-//             }
-//         }
-        
-//         int ret = sol.solution(N, M, garden);
+// for(int i=0;i<N;i++){
+// for(int j=0;j<M;j++){
+// garden[i][j] = sc.nextInt();
+// }
+// }
 
-//         System.out.println( ret );
-//     }
+// int ret = sol.solution(N, M, garden);
+
+// System.out.println( ret );
+// }
 // }
