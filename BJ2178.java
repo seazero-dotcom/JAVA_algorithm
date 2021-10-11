@@ -15,117 +15,79 @@ N×M크기의 배열로 표현되는 미로가 있다.
 칸을 셀 때에는 시작 위치와 도착 위치도 포함한다.
 */
 
+import java.io.*;
 import java.util.*;
 
-class Pair {
+class Coordinate {
     int x;
     int y;
-    Pair(int x, int y) {
+
+    public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
 }
 
 public class BJ2178 {
-    public static final int[] dx = {0, 0, 1, -1};
-    public static final int[] dy = {1, -1, 0, 0};
-    public static void main(String args[]) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-        int[][] a = new int[n][m];
-        sc.nextLine();
-        for (int i=0; i<n; i++) {
-            String s = sc.nextLine();
-            for (int j=0; j<m; j++) {
-                a[i][j] = s.charAt(j) - '0';
-            }
+    static int N;
+    static int M;
+    static ArrayList<String> maze;
+    static boolean[][] visited;
+    static int[] dx = { 0, 0, 1, -1 };
+    static int[] dy = { 1, -1, 0, 0 };
+    static int[][] distance;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        // 최단거리 문제이기 때문에 BFS으로 풀어야한다. DFS로 하면 시간초과가 난다.
+        // DFS는 stack과 재귀함수(Recursion)로 가능하지만, BFS는 Queue로 구현한다.
+
+        maze = new ArrayList<String>();
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        visited = new boolean[N][M];
+        distance = new int[N][M];
+
+        for (int i = 0; i < N; i++) {
+            maze.add(br.readLine());
         }
-        int[][] dist = new int[n][m];
-        boolean[][] check = new boolean[n][m];
-        Queue<Pair> q = new LinkedList<Pair>();
-        q.add(new Pair(0, 0));  // offer, poll을 add, remove로 바꾸니까 런타임에러가 해결됐다
-        check[0][0] = true;
-        dist[0][0] = 1;
+
+        BFS();
+
+        bw.write(String.valueOf(distance[N - 1][M - 1]));
+
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
+    public static void BFS() {
+        Queue<Coordinate> q = new LinkedList<Coordinate>();
+        q.add(new Coordinate(0, 0));
+        distance[0][0] = 1;
+        visited[0][0] = true;
+
         while (!q.isEmpty()) {
-            Pair p = q.remove();
-            int x = p.x;
-            int y = p.y;
-            for (int k=0; k<4; k++) {
-                int nx = x+dx[k];
-                int ny = y+dy[k];
-                if (0 <= nx && nx < n && 0 <= ny && ny < m) {
-                    if (check[nx][ny] == false && a[nx][ny] == 1) {
-                        q.add(new Pair(nx, ny));
-                        dist[nx][ny] = dist[x][y] + 1;
-                        check[nx][ny] = true;
+            Coordinate coordinate = q.remove();
+            int x = coordinate.x;
+            int y = coordinate.y;
+
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+
+                if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
+                    if (maze.get(nx).charAt(ny) == '1' && !visited[nx][ny]) {
+                        q.add(new Coordinate(nx, ny));
+                        visited[nx][ny] = true;
+                        distance[nx][ny] = distance[x][y] + 1;
                     }
                 }
             }
         }
-        System.out.println(dist[n-1][m-1]);
     }
 }
-
-
-
-
-// import java.util.*;
-
-// class Pair {
-//     int x, y;
-
-//     Pair(int x, int y) {
-//         this.x = x;
-//         this.y = y;
-//     }
-// }
-
-// public class BJ2178 {
-//     public static final int[] dx = { 0, 0, 1, -1 };
-//     public static final int[] dy = { -1, 1, 0, 0 };
-
-//     public static void main(String[] args) {
-//         Scanner sc = new Scanner(System.in);
-//         int N = sc.nextInt();
-//         int M = sc.nextInt();
-//         int[][] board = new int[N][M]; // 행열받고 숫자 넣을 판 만들기
-//         sc.nextLine();
-
-//         for (int i = 0; i < N; i++) { // 행만큼 줄받고
-//             String s = sc.nextLine(); // 한줄에 띄어쓰기 없이 스트링으로 받고
-//             for (int j = 0; j < M; j++) { // 열만큼 뜯어주고
-//                 board[i][j] = s.charAt(i) - '0'; // 한 글자 뜯고 -'0'로 int로형변환
-//             }
-//         }
-
-//         int[][] dist = new int[N][M]; // 거리 를 계산할 배열 만들기
-//         boolean[][] check = new boolean[N][M]; // 방문여부를 기록할 체크
-//         Queue<Pair> q = new LinkedList<Pair>(); // 방문하기 위해 넣었다 뺐다 할 큐 생성
-//         q.offer(new Pair(0, 0)); // 시작점인 0,0 넣기
-//         check[0][0] = true;// 넣음과 동시에 방문처리
-//         dist[0][0] = 1;// 동시에 거리도 1추가
-
-//         while (!q.isEmpty()) { // 모두 방문하여 큐가 빌 때까지 반복문
-//             Pair p = q.poll(); // 맨 앞에있는것 제거, 방문했으니까 ~
-//             // 위에서 q.offer(new Pair(0,0)); 이렇게해서 Pair클래스에 저장된거야?
-//             // 그래서 poll할때도 저렇게 해야되는거야?
-//             int x = p.x; // poll한 x를 저장>? ㅇㅇ 맞는득
-//             int y = p.y; // poll한 y를 저장?
-
-//             for (int k = 0; k < 4; k++) {
-//                 int nx = x + dx[k]; // 제거한 자리에서 상(저장) 하 우 좌
-//                 int ny = y + dy[k]; // 제거한 자리에서 상(저장) 하 우 좌
-
-//                 if (0 <= nx && nx < N && 0 <= ny && ny < M) { // 범위 안에 있는 좌표인지 확인
-//                     if (check[nx][ny] == false && board[nx][ny] == 1) { // 방문안했고 1있는거
-//                         q.offer(new Pair(nx, ny)); // 이동한 좌표 넣고
-//                         dist[nx][ny] = dist[x][y] + 1; // 기존누적거리 + 1 늘리고
-//                         check[nx][ny] = true; // 방문했다 표시하고
-//                     }
-//                 }
-//             }
-//         }
-//         System.out.println(dist[N - 1][M - 1]); // 거리배열의 마지막 값을 출력
-//     }
-// }
