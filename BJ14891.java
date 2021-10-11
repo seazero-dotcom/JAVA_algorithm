@@ -21,13 +21,8 @@ public class BJ14891 {
 
         for (int i = 0; i < 4; i++) {
             Gear.add(new ArrayList<>());
-            // StringTokenizer st = new StringTokenizer(br.readLine());
-            // for (int j = 0; j < 8; j++) {
-            // Gear.get(i).add(Integer.parseInt(st.nextToken()));
-            // }
             str = br.readLine();
             for (int j = 0; j < 8; j++) {
-                // Gear.get(i).add(j, String.valueOf(st.nextToken().charAt(j)));
                 Gear.get(i).add(j, String.valueOf(str.charAt(j)));
 
             }
@@ -41,14 +36,12 @@ public class BJ14891 {
             StringTokenizer st = new StringTokenizer(br.readLine());
             gearNum[i] = Integer.parseInt(st.nextToken()); // Gear에 0부터 저장되기 때문에 나중에 사용할 때 -1 해줘야함
             rotationDirection[gearNum[i] - 1] = Integer.parseInt(st.nextToken());
-        }
-
-        for (int i = 0; i < K; i++) {
             Direction(gearNum[i]);
             rotationDirection = new int[4];
         }
+
         Jumsu();
-        bw.write(String.valueOf(sum));
+        bw.write(String.valueOf((int) sum));
 
         bw.flush();
         bw.close();
@@ -58,12 +51,9 @@ public class BJ14891 {
 
     public static void Direction(int num) {
         // 무슨 톱니가 어느 방향으로 돌아갈지 저장하기
-        // 3, -1 --> 2, -1
 
         for (int j = num; j < 4; j++) { // 우톱니
-            System.out.println(" 톱스타1 :" + Gear.get(j - 1).get(2));
-            System.out.println(" 톱스타2 :" + Gear.get(j).get(6));
-            if (Gear.get(j - 1).get(2) != Gear.get(j).get(6)) {
+            if (!Gear.get(j - 1).get(2).equals(Gear.get(j).get(6))) {
                 rotationDirection[j] = -rotationDirection[j - 1];
             } else {
                 break;
@@ -71,17 +61,11 @@ public class BJ14891 {
         }
 
         for (int j = num - 1; j > 0; j--) { // 좌톱니
-            System.out.println(" 톱1 :" + Gear.get(j - 1).get(2));
-            System.out.println(" 톱2 :" + Gear.get(j).get(6));
-            if (Gear.get(j - 1).get(2) != Gear.get(j).get(6)) {
+            if (!Gear.get(j - 1).get(2).equals(Gear.get(j).get(6))) {
                 rotationDirection[j - 1] = -rotationDirection[j];
             } else {
                 break;
             }
-        }
-
-        for (int i = 0; i < 4; i++) {
-            System.out.print(rotationDirection[i] + " ");
         }
 
         // 이동하기
@@ -112,19 +96,12 @@ public class BJ14891 {
             }
         }
 
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 8; j++) {
-                System.out.print(Gear.get(i).get(j));
-            }
-            System.out.println();
-        }
-
     }
 
     public static void Jumsu() {
 
         for (int i = 0; i < 4; i++) {
-            if (Gear.get(i).get(0) == "1") {
+            if (Gear.get(i).get(0).equals("1")) {
                 sum = sum + Math.pow(2, i);
             }
         }
